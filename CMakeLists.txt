@@ -9,14 +9,19 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 add_definitions(-DASIO_STANDALONE)
 
+include_directories(lib)
 include_directories(src)
 
+set(LIB
+    lib/posix/error.hpp
+    lib/posix/error.cpp
+)
 set(MAIN src/main.cpp)
 set(FILES LICENSE.md README.md)
 
 ########################
 # executable
-add_executable(${PROJECT_NAME} ${MAIN})
+add_executable(${PROJECT_NAME} ${LIB} ${MAIN})
 
 # install
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
