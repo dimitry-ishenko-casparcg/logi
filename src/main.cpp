@@ -70,6 +70,28 @@ auto open_output(asio::io_service& io, int n)
     asio::posix::stream_descriptor desc(io);
     desc.assign(fd);
 
+    ////////////////////
+    io_cmd<UI_SET_EVBIT, int> set_ev { EV_KEY };
+    desc.io_control(set_ev);
+
+    for(int code = 1; code < 255; ++code)
+    {
+        io_cmd<UI_SET_KEYBIT, int> set_code { code };
+        desc.io_control(set_code);
+    }
+
+    io_cmd<UI_DEV_SETUP, uinput_setup*> setup
+    {
+        {
+            { BUS_USB, 0x42, static_cast<__u16>(n), 1 }, // bus, vid, pid, version
+            "Logitech"
+        }
+    };
+    desc.io_control(setup);
+
+    io_cmd<UI_DEV_CREATE> create;
+    desc.io_control(create);
+
     return std::move(desc);
 }
 
