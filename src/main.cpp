@@ -10,6 +10,7 @@
 #include <asio.hpp>
 #include <functional>
 #include <iostream>
+#include <random>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -121,10 +122,14 @@ try
         std::string() + "Usage: " + argv[0] + " /path/to/device"
     );
 
+    std::mt19937 rng;
+    rng.seed(std::random_device()());
+    std::uniform_int_distribution<> dist(0, 9999);
+
     asio::io_service io;
 
     auto remote = open_input(io, argv[1]);
-    auto uinput = open_output(io, 0);
+    auto uinput = open_output(io, dist(rng));
 
     input_event event;
     auto buffer = asio::buffer(&event, sizeof(event));
