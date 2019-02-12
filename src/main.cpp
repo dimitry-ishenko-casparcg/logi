@@ -6,13 +6,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 #include "posix/error.hpp"
+#include "util/logging.hpp"
 
 #include <asio.hpp>
 #include <asio/steady_timer.hpp>
 #include <chrono>
 #include <csignal>
 #include <functional>
-#include <iostream>
 #include <random>
 #include <stdexcept>
 #include <string>
@@ -25,6 +25,7 @@
 #include <unistd.h>
 
 using namespace std::chrono_literals;
+using namespace util::logging;
 
 ////////////////////////////////////////////////////////////////////////////////
 template<unsigned n, typename T = void>
@@ -53,14 +54,14 @@ struct io_cmd<n, void>
 ////////////////////////////////////////////////////////////////////////////////
 auto open_input(asio::io_service& io, const char* path)
 {
-    std::cout << "Opening " << path << std::endl;
+    info() << "Opening " << path;
     auto fd = ::open(path, O_RDONLY);
     if(fd < 0) throw posix::errno_error();
 
     asio::posix::stream_descriptor desc(io);
     desc.assign(fd);
 
-    std::cout << "Grabbing device" << std::endl;
+    info() << "Grabbing device";
     io_cmd<EVIOCGRAB, int> grab { 1 };
     desc.io_control(grab);
 
@@ -70,7 +71,7 @@ auto open_input(asio::io_service& io, const char* path)
 ////////////////////////////////////////////////////////////////////////////////
 auto open_output(asio::io_service& io, int n)
 {
-    std::cout << "Opening uinput device" << std::endl;
+    info() << "Opening uinput device";
     auto fd = ::open("/dev/uinput", O_WRONLY | O_NONBLOCK);
     if(fd < 0) throw posix::errno_error();
 
@@ -108,7 +109,7 @@ void send_code(asio::posix::stream_descriptor& uinput, int code)
     static input_event event { { 0, 0 }, EV_KEY };
     static const input_event sync { { 0, 0 }, EV_SYN, SYN_REPORT, 0 };
 
-    std::cout << "Sending code " << code << std::endl;
+    dbg() << "Sending code " << code;
 
     event.code = static_cast<__u16>(code);
     event.value = 1;
@@ -124,6 +125,9 @@ void send_code(asio::posix::stream_descriptor& uinput, int code)
 int main(int argc, char* argv[])
 try
 {
+    util::send_to_console(true);
+    util::send_to_syslog(true);
+
     if(argc != 2) throw std::runtime_error(
         std::string() + "Usage: " + argv[0] + " /path/to/device"
     );
@@ -150,7 +154,7 @@ try
 
             if(event.type == EV_KEY && event.value == 1)
             {
-                std::cout << "Received code " << event.code << std::endl;
+                dbg() << "Received code " << event.code;
                 switch(event.code)
                 {
                 case KEY_PAGEUP:
@@ -191,7 +195,7 @@ try
             struct stat sb;
             if(::stat(path, &sb))
             {
-                std::cout << "Device " << path << " disappeared" << std::endl;
+                warn() << "Device " << path << " disappeared";
                 std::raise(SIGTERM);
             }
             else
@@ -210,20 +214,20 @@ try
     {
         if(ec) return;
 
-        std::cout << "Received signal " << n << " - terminating" << std::endl;
+        warn() << "Received signal " << n << " - terminating";
         remote.close();
         timer.cancel();
     });
 
     ////////////////////
-    std::cout << "Starting event loop" << std::endl;
+    dbg() << "Starting event loop";
     io.run();
-    std::cout << "Exited event loop" << std::endl;
+    dbg() << "Exited event loop";
 
     return 0;
 }
 catch(std::exception& e)
 {
-    std::cerr << e.what() << std::endl;
+    err() << e.what();
     return 1;
 }
