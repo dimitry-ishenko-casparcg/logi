@@ -145,16 +145,24 @@ try
                 switch(event.code)
                 {
                 case KEY_PAGEUP:
+                    send_code(uinput, KEY_UP);
+                    send_code(uinput, KEY_F2);
                     break;
 
                 case KEY_PAGEDOWN:
+                    send_code(uinput, KEY_DOWN);
+                    send_code(uinput, KEY_F2);
                     break;
 
                 case KEY_F5:
                 case KEY_ESC:
+                    send_code(uinput, KEY_HOME);
+                    send_code(uinput, KEY_F2);
                     break;
 
                 case KEY_DOT:
+                    send_code(uinput, KEY_END);
+                    send_code(uinput, KEY_F2);
                     break;
                 }
             }
