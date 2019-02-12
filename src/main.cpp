@@ -96,6 +96,24 @@ auto open_output(asio::io_service& io, int n)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void send_code(asio::posix::stream_descriptor& uinput, int code)
+{
+    static input_event event { { 0, 0 }, EV_KEY };
+    static const input_event sync { { 0, 0 }, EV_SYN, SYN_REPORT, 0 };
+
+    std::cout << "Sending code: " << code << std::endl;
+
+    event.code = static_cast<__u16>(code);
+    event.value = 1;
+    asio::write(uinput, asio::buffer(&event, sizeof(event)));
+    asio::write(uinput, asio::buffer(&sync, sizeof(sync)));
+
+    event.value = 0;
+    asio::write(uinput, asio::buffer(&event, sizeof(event)));
+    asio::write(uinput, asio::buffer(&sync, sizeof(sync)));
+}
+
+////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[])
 try
 {
@@ -121,7 +139,7 @@ try
         auto event = reinterpret_cast<input_event*>(buffer.data());
         if(event->type == EV_KEY && event->value == 1)
         {
-            std::cout << "Received key code: " << event->code << std::endl;
+            std::cout << "Received code: " << event->code << std::endl;
             switch(event->code)
             {
             case KEY_PAGEUP:
