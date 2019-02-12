@@ -29,6 +29,9 @@ target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(FILES ${FILES} DESTINATION share/doc/${PROJECT_NAME})
 
+configure_file(udev/50-logi.rules.in 50-logi.rules @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/50-logi.rules DESTINATION /lib/udev/rules.d)
+
 ########################
 # package
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
