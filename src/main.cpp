@@ -20,12 +20,27 @@
 #include <sys/types.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-template<typename T, unsigned n>
+template<unsigned n, typename T = void>
 struct io_cmd
+{
+    constexpr auto name() const noexcept { return n; }
+    constexpr void* data() noexcept { return reinterpret_cast<void*>(data_); }
+    T data_;
+};
+
+template<unsigned n, typename T>
+struct io_cmd<n, T*>
 {
     constexpr auto name() const noexcept { return n; }
     constexpr void* data() noexcept { return &data_; }
     T data_;
+};
+
+template<unsigned n>
+struct io_cmd<n, void>
+{
+    constexpr auto name() const noexcept { return n; }
+    constexpr void* data() noexcept { return nullptr; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -39,8 +54,8 @@ auto open_input(asio::io_service& io, const char* path)
     desc.assign(fd);
 
     std::cout << "Grabbing device" << std::endl;
-    io_cmd<int, EVIOCGRAB> cmd { 1 };
-    desc.io_control(cmd);
+    io_cmd<EVIOCGRAB, int> grab { 1 };
+    desc.io_control(grab);
 
     return std::move(desc);
 }
