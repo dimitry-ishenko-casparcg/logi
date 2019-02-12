@@ -117,56 +117,53 @@ void send_code(asio::posix::stream_descriptor& uinput, int code)
 int main(int argc, char* argv[])
 try
 {
-    ////////////////////
     if(argc != 2) throw std::runtime_error(
         std::string() + "Usage: " + argv[0] + " /path/to/device"
     );
 
     asio::io_service io;
 
-    ////////////////////
     auto remote = open_input(io, argv[1]);
     auto uinput = open_output(io, 0);
 
-    ////////////////////
-    std::vector<char> buffer(sizeof(input_event));
-    std::function<void(const asio::error_code& ec, std::size_t)> read_input;
+    input_event event;
+    auto buffer = asio::buffer(&event, sizeof(event));
 
-    read_input = [&](const asio::error_code& ec, std::size_t)
-    {
-        if(ec) return;
-
-        auto event = reinterpret_cast<input_event*>(buffer.data());
-        if(event->type == EV_KEY && event->value == 1)
+    std::function<void(const asio::error_code&, std::size_t)> recv_event =
+        [&](const asio::error_code& ec, std::size_t)
         {
-            std::cout << "Received code: " << event->code << std::endl;
-            switch(event->code)
+            if(ec) return;
+
+            if(event.type == EV_KEY && event.value == 1)
             {
-            case KEY_PAGEUP:
-                break;
+                std::cout << "Received code: " << event.code << std::endl;
+                switch(event.code)
+                {
+                case KEY_PAGEUP:
+                    break;
 
-            case KEY_PAGEDOWN:
-                break;
+                case KEY_PAGEDOWN:
+                    break;
 
-            case KEY_F5:
-            case KEY_ESC:
-                break;
+                case KEY_F5:
+                case KEY_ESC:
+                    break;
 
-            case KEY_DOT:
-                break;
+                case KEY_DOT:
+                    break;
+                }
             }
-        }
 
-        asio::async_read(remote, asio::buffer(buffer), read_input);
-    };
+            asio::async_read(remote, buffer, recv_event);
+        };
 
-    asio::async_read(remote, asio::buffer(buffer), read_input);
+    asio::async_read(remote, buffer, recv_event);
 
     ////////////////////
     std::cout << "Starting event loop" << std::endl;
     io.run();
-
     std::cout << "Exited event loop" << std::endl;
+
     return 0;
 }
 catch(std::exception& e)
