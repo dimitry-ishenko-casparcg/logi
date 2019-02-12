@@ -29,6 +29,36 @@ struct io_cmd
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+auto open_input(asio::io_service& io, const char* path)
+{
+    std::cout << "Opening " << path << std::endl;
+    auto fd = ::open(path, O_RDONLY);
+    if(fd < 0) throw posix::errno_error();
+
+    asio::posix::stream_descriptor desc(io);
+    desc.assign(fd);
+
+    std::cout << "Grabbing device" << std::endl;
+    io_cmd<int, EVIOCGRAB> cmd { 1 };
+    desc.io_control(cmd);
+
+    return std::move(desc);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+auto open_output(asio::io_service& io, int n)
+{
+    std::cout << "Opening uinput device" << std::endl;
+    auto fd = ::open("/dev/uinput", O_WRONLY | O_NONBLOCK);
+    if(fd < 0) throw posix::errno_error();
+
+    asio::posix::stream_descriptor desc(io);
+    desc.assign(fd);
+
+    return std::move(desc);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[])
 try
 {
@@ -40,24 +70,8 @@ try
     asio::io_service io;
 
     ////////////////////
-    std::cout << "Opening input device: " << argv[1] << std::endl;
-    auto fd = ::open(argv[1], O_RDONLY);
-    if(fd < 0) throw posix::errno_error();
-
-    asio::posix::stream_descriptor logi(io);
-    logi.assign(fd);
-
-    std::cout << "Grabbing input device" << std::endl;
-    io_cmd<int, EVIOCGRAB> cmd { 1 };
-    logi.io_control(cmd);
-
-    ////////////////////
-    std::cout << "Opening output device: /dev/uinput" << std::endl;
-    fd = ::open("/dev/uinput", O_WRONLY | O_NONBLOCK);
-    if(fd < 0) throw posix::errno_error();
-
-    asio::posix::stream_descriptor uinput(io);
-    uinput.assign(fd);
+    auto remote = open_input(io, argv[1]);
+    auto uinput = open_output(io, 0);
 
     ////////////////////
     std::vector<char> buffer(sizeof(input_event));
@@ -88,10 +102,10 @@ try
             }
         }
 
-        asio::async_read(logi, asio::buffer(buffer), read_input);
+        asio::async_read(remote, asio::buffer(buffer), read_input);
     };
 
-    asio::async_read(logi, asio::buffer(buffer), read_input);
+    asio::async_read(remote, asio::buffer(buffer), read_input);
 
     ////////////////////
     std::cout << "Starting event loop" << std::endl;
