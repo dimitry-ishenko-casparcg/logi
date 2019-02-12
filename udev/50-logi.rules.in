@@ -1,1 +1,0 @@
-ACTION=="add", SUBSYSTEM=="input", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c538", RUN+="@CMAKE_INSTALL_PREFIX@/bin/@PROJECT_NAME@ $env{DEVNAME}"

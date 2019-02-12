@@ -1,0 +1,5 @@
+[Unit]
+Description=Logitech R800 control on %I
+
+[Service]
+ExecStart=@CMAKE_INSTALL_PREFIX@/bin/@PROJECT_NAME@ %I

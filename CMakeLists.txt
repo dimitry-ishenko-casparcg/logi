@@ -19,20 +19,22 @@ set(LIB
     lib/util/logging.hpp
     lib/util/logging.cpp
 )
-set(MAIN src/main.cpp)
-set(FILES LICENSE.md README.md)
+set(SRC src/main.cpp)
+set(DOC LICENSE.md README.md)
 
 ########################
 # executable
-add_executable(${PROJECT_NAME} ${LIB} ${MAIN})
+add_executable(${PROJECT_NAME} ${LIB} ${SRC})
 target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
 
 # install
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
-install(FILES ${FILES} DESTINATION share/doc/${PROJECT_NAME})
+install(FILES ${DOC} DESTINATION share/doc/${PROJECT_NAME})
 
-configure_file(udev/50-logi.rules.in 50-logi.rules @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/50-logi.rules DESTINATION /lib/udev/rules.d)
+install(FILES udev/50-logi.rules DESTINATION /lib/udev/rules.d)
+
+configure_file(systemd/logi@.service.in logi@.service @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/logi@.service DESTINATION /lib/systemd/system)
 
 ########################
 # package

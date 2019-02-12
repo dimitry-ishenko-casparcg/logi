@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="input", ENV{DEVNAME}!="", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c538", TAG+="systemd", ENV{SYSTEMD_WANTS}="logi@$env{DEVNAME}.service"
