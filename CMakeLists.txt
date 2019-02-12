@@ -43,9 +43,9 @@ set(CPACK_PACKAGE_FILE_NAME
 )
 
 # binary
-#set(CPACK_GENERATOR DEB)
-#set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "...")
-#set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Dimitry Ishenko <dimitry (dot) ishenko (at) (gee) mail (dot) com>")
-#set(CPACK_DEBIAN_PACKAGE_DEPENDS "...")
+set(CPACK_GENERATOR DEB)
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "...")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Dimitry Ishenko <dimitry (dot) ishenko (at) (gee) mail (dot) com>")
+#set(CPACK_DEBIAN_PACKAGE_DEPENDS "libasio-dev (>= 1.10.10)")
 
-#include(CPack)
+include(CPack)
