@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(logi VERSION 1.0)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -16,6 +16,8 @@ include_directories(src)
 set(LIB
     lib/posix/error.hpp
     lib/posix/error.cpp
+    lib/util/logging.hpp
+    lib/util/logging.cpp
 )
 set(MAIN src/main.cpp)
 set(FILES LICENSE.md README.md)
