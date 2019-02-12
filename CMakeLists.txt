@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 add_definitions(-DASIO_STANDALONE)
+find_package(Threads REQUIRED)
 
 include_directories(lib)
 include_directories(src)
@@ -22,6 +23,7 @@ set(FILES LICENSE.md README.md)
 ########################
 # executable
 add_executable(${PROJECT_NAME} ${LIB} ${MAIN})
+target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
 
 # install
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)

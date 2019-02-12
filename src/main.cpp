@@ -172,6 +172,15 @@ try
 
     asio::async_read(remote, buffer, recv_event);
 
+    asio::signal_set signals(io, SIGINT, SIGTERM);
+    signals.async_wait([&](const asio::error_code& ec, int n)
+    {
+        if(ec) return;
+
+        std::cout << "Received signal " << n << " - terminating" << std::endl;
+        remote.close();
+    });
+
     ////////////////////
     std::cout << "Starting event loop" << std::endl;
     io.run();
