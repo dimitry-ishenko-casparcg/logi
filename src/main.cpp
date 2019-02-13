@@ -52,10 +52,10 @@ struct io_cmd<n, void>
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-auto open_input(asio::io_service& io, const char* path)
+auto open_input(asio::io_service& io, const std::string& path)
 {
     info() << "Opening " << path;
-    auto fd = ::open(path, O_RDONLY);
+    auto fd = ::open(path.data(), O_RDONLY);
     if(fd < 0) throw posix::errno_error();
 
     asio::posix::stream_descriptor desc(io);
@@ -122,18 +122,34 @@ void send_code(asio::posix::stream_descriptor& uinput, int code)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void throw_usage(const std::string& name)
+{
+    throw std::runtime_error(
+        "Usage: " + name + " [-s|--syslog] /path/to/device"
+    );
+}
+
+////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[])
 try
 {
-    util::send_to_console(true);
-    util::send_to_syslog(true);
+    std::string name = argv[0], path;
 
-    if(argc != 2) throw std::runtime_error(
-        std::string() + "Usage: " + argv[0] + " /path/to/device"
-    );
+    for(int n = 1; n < argc; ++n)
+    {
+        std::string arg = argv[n];
+        if(arg == "-s" || arg == "--syslog")
+        {
+            util::send_to_syslog(true);
+            util::send_to_console(false);
+        }
+        else if(path.size())
+            throw_usage(argv[0]);
+        else path = arg;
+    }
+    if(path.empty()) throw_usage(argv[0]);
 
-    auto path = argv[1];
-
+    ////////////////////
     std::mt19937 rng;
     rng.seed(std::random_device()());
     std::uniform_int_distribution<> dist(0, 9999);
@@ -193,7 +209,7 @@ try
             if(ec) return;
 
             struct stat sb;
-            if(::stat(path, &sb))
+            if(::stat(path.data(), &sb))
             {
                 warn() << "Device " << path << " disappeared";
                 std::raise(SIGTERM);
