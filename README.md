@@ -19,16 +19,16 @@ Operation:
 
 Binary (Debian/Ubuntu/etc):
 ```console
-$ wget https://github.com/dimitry-ishenko-casparcg/logi/releases/download/v1.0/logi_1.0_Linux_x86_64.deb
-$ sudo apt install ./logi_1.0_Linux_x86_64.deb
+$ wget https://github.com/dimitry-ishenko-casparcg/logi/releases/download/v1.1/logi_1.1_Linux_x86_64.deb
+$ sudo apt install ./logi_1.1_Linux_x86_64.deb
 ```
 
 Compile from source:
 ```console
-$ wget https://github.com/dimitry-ishenko-casparcg/logi/releases/download/v1.0/logi-1.0-Source.tar.bz2
-$ tar xjf logi-1.0-Source.tar.bz2
-$ mkdir logi-1.0-Source/build
-$ cd logi-1.0-Source/build
+$ wget https://github.com/dimitry-ishenko-casparcg/logi/releases/download/v1.1/logi-1.1-Source.tar.bz2
+$ tar xjf logi-1.1-Source.tar.bz2
+$ mkdir logi-1.1-Source/build
+$ cd logi-1.1-Source/build
 $ cmake .. -DCMAKE_INSTALL_PREFIX=/usr
 $ make
 $ sudo make install
