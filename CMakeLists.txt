@@ -10,8 +10,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 add_definitions(-DASIO_STANDALONE)
 find_package(Threads REQUIRED)
 
-include_directories(lib)
-include_directories(src)
+include_directories(lib src)
 
 set(LIB
     lib/posix/error.hpp
@@ -50,7 +49,7 @@ set(CPACK_SOURCE_IGNORE_FILES /\.git.*;/build/;\.user$)
 
 # binary
 set(CPACK_GENERATOR DEB)
-set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "...")
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Logitech R800 remote control")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Dimitry Ishenko <dimitry (dot) ishenko (at) (gee) mail (dot) com>")
 #set(CPACK_DEBIAN_PACKAGE_DEPENDS "libasio-dev (>= 1.10.10)")
 
