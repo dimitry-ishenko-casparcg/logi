@@ -1,13 +1,9 @@
-# Project Name
+# Logitech R800 control for CasparCG Client
 
-Project description.
+This program enables control of the [CasparCG Client](https://github.com/CasparCG/client) using the
+[Logitech R800](https://www.logitech.com/en-us/products/presenters/r800-professional-presenter.html) remote control.
 
 ## Installation
-
-### Prerequisites
-
-* Project A
-* Project B
 
 ### Binary
 
@@ -31,7 +27,7 @@ $ sudo apt install ./..._${ver}_armhf.deb
 
 ### From source
 
-Stable version (requires [CMake](https://cmake.org/) >= 3.1):
+Stable version (requires [CMake](https://cmake.org/) >= 3.1 and [asio](https://think-async.com/Asio/)):
 
 ```shell
 $ ver=0.0
@@ -44,7 +40,7 @@ $ make
 $ sudo make install
 ```
 
-Latest master (requires [git](https://git-scm.com/) and [CMake](https://cmake.org/) >= 3.1):
+Latest master (requires [git](https://git-scm.com/), [CMake](https://cmake.org/) >= 3.1 and [asio](https://think-async.com/Asio/)):
 
 ```shell
 $ git clone https://github.com/.../....git
@@ -63,7 +59,3 @@ $ sudo make install
 
 This project is distributed under the GNU GPL license. See the
 [LICENSE.md](LICENSE.md) file for details.
-
-## Acknowledgments
-
-* John Doe
