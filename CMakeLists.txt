@@ -9,7 +9,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 add_definitions(-DASIO_STANDALONE)
 add_definitions(-DVERSION="${PROJECT_VERSION}")
 
-set(SOURCES src/main.cpp)
+set(SOURCES
+    pgm/args.cpp pgm/args.hpp
+    src/main.cpp
+)
 
 include(GNUInstallDirs)
 
