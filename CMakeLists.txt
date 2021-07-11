@@ -12,6 +12,7 @@ add_definitions(-DVERSION="${PROJECT_VERSION}")
 set(SOURCES
     pgm/args.cpp pgm/args.hpp
     src/main.cpp
+    src/util.cpp src/util.hpp
 )
 
 include(GNUInstallDirs)
