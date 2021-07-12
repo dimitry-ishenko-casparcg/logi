@@ -10,7 +10,7 @@ This program enables control of the [CasparCG Client](https://github.com/CasparC
 Debian/Ubuntu/etc:
 
 ```shell
-$ ver=0.0
+$ ver=2.0
 $ url=https://github.com/dimitry-ishenko-casparcg/logi/releases/download/v${ver}
 $ wget ${url}/logi_${ver}_amd64.deb
 $ sudo apt install ./logi_${ver}_amd64.deb
@@ -19,7 +19,7 @@ $ sudo apt install ./logi_${ver}_amd64.deb
 RaspberryPi:
 
 ```shell
-$ ver=0.0
+$ ver=2.0
 $ url=https://github.com/dimitry-ishenko-casparcg/logi/releases/download/v${ver}
 $ wget ${url}/logi_${ver}_armhf.deb
 $ sudo apt install ./logi_${ver}_armhf.deb
@@ -30,7 +30,7 @@ $ sudo apt install ./logi_${ver}_armhf.deb
 Stable version (requires [CMake](https://cmake.org/) >= 3.1 and [asio](https://think-async.com/Asio/)):
 
 ```shell
-$ ver=0.0
+$ ver=2.0
 $ wget https://github.com/dimitry-ishenko-casparcg/logi/archive/v${ver}.tar.gz
 $ tar xzf v${ver}.tar.gz
 $ mkdir logi-${ver}/build
