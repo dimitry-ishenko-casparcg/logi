@@ -14,6 +14,7 @@ find_package(Threads REQUIRED)
 set(SOURCES
     pgm/args.cpp pgm/args.hpp
     src/main.cpp
+    src/remote.cpp src/remote.hpp
     src/util.cpp src/util.hpp
 )
 
