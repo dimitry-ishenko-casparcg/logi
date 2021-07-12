@@ -55,7 +55,7 @@ sender::sender(asio::io_context& io) :
     sd_{ io }
 {
     std::cout << "Opening device \"/dev/uinput\"." << std::endl;
-    auto fd = ::open("/dev/uinput", O_RDONLY);
+    auto fd = ::open("/dev/uinput", O_WRONLY | O_NONBLOCK);
 
     if(fd == -1) throw std::system_error{
         std::error_code{ errno, std::generic_category() }
