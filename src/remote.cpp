@@ -27,14 +27,14 @@ namespace
 
 struct grab_device
 {
-    auto name() const { return EVIOCGRAB; }
-    auto data() const { return reinterpret_cast<void*>(1); }
+    auto name() { return EVIOCGRAB; }
+    auto data() { return reinterpret_cast<void*>(1); }
 };
 
 struct release_device
 {
-    auto name() const { return EVIOCGRAB; }
-    auto data() const { return reinterpret_cast<void*>(0); }
+    auto name() { return EVIOCGRAB; }
+    auto data() { return reinterpret_cast<void*>(0); }
 };
 
 }
