@@ -6,6 +6,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 #include "pgm/args.hpp"
+#include "remote.hpp"
+#include "sender.hpp"
 #include "util.hpp"
 
 #include <asio.hpp>
@@ -55,6 +57,36 @@ try
         fs::path path{ args["path"].value() };
 
         asio::io_context io;
+
+        src::remote remote{ io, path };
+        src::sender sender{ io };
+
+        remote.on_press([&](int code)
+        {
+            switch(code)
+            {
+            case KEY_PAGEUP:
+                sender.send(KEY_UP);
+                sender.send(KEY_F2);
+                break;
+
+            case KEY_PAGEDOWN:
+                sender.send(KEY_DOWN);
+                sender.send(KEY_F2);
+                break;
+
+            case KEY_F5:
+            case KEY_ESC:
+                sender.send(KEY_HOME);
+                sender.send(KEY_F2);
+                break;
+
+            case KEY_DOT:
+                sender.send(KEY_END);
+                sender.send(KEY_F2);
+                break;
+            }
+        });
 
         src::on_interrupt([&](int signal)
         {
