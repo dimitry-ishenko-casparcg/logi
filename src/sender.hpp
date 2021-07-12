@@ -19,6 +19,7 @@ class sender
 {
 public:
     explicit sender(asio::io_context&);
+    ~sender();
 
     void send(int);
 

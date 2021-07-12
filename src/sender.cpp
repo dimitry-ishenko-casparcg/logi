@@ -48,6 +48,12 @@ struct create_device
     auto data() { return reinterpret_cast<void*>(0); }
 };
 
+struct destroy_device
+{
+    auto name() { return UI_DEV_DESTROY; }
+    auto data() { return reinterpret_cast<void*>(0); }
+};
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -82,6 +88,15 @@ sender::sender(asio::io_context& io) :
 
     create_device cmd3;
     sd_.io_control(cmd3);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+sender::~sender()
+{
+    destroy_device cmd;
+    asio::error_code ec;
+
+    sd_.io_control(cmd, ec);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
