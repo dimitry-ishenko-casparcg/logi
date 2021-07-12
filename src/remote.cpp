@@ -62,7 +62,9 @@ remote::remote(asio::io_context& io, fs::path path) :
 remote::~remote()
 {
     release_device cmd;
-    sd_.io_control(cmd);
+    asio::error_code ec;
+
+    sd_.io_control(cmd, ec);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
