@@ -11,18 +11,18 @@ Debian/Ubuntu/etc:
 
 ```shell
 $ ver=0.0
-$ url=https://github.com/.../.../releases/download/v${ver}
-$ wget ${url}/..._${ver}_amd64.deb
-$ sudo apt install ./..._${ver}_amd64.deb
+$ url=https://github.com/dimitry-ishenko-casparcg/logi/releases/download/v${ver}
+$ wget ${url}/logi_${ver}_amd64.deb
+$ sudo apt install ./logi_${ver}_amd64.deb
 ```
 
 RaspberryPi:
 
 ```shell
 $ ver=0.0
-$ url=https://github.com/.../.../releases/download/v${ver}
-$ wget ${url}/..._${ver}_armhf.deb
-$ sudo apt install ./..._${ver}_armhf.deb
+$ url=https://github.com/dimitry-ishenko-casparcg/logi/releases/download/v${ver}
+$ wget ${url}/logi_${ver}_armhf.deb
+$ sudo apt install ./logi_${ver}_armhf.deb
 ```
 
 ### From source
@@ -31,10 +31,10 @@ Stable version (requires [CMake](https://cmake.org/) >= 3.1 and [asio](https://t
 
 ```shell
 $ ver=0.0
-$ wget https://github.com/.../.../archive/v${ver}.tar.gz
+$ wget https://github.com/dimitry-ishenko-casparcg/logi/archive/v${ver}.tar.gz
 $ tar xzf v${ver}.tar.gz
-$ mkdir ...-${ver}/build
-$ cd ...-${ver}/build
+$ mkdir logi-${ver}/build
+$ cd logi-${ver}/build
 $ cmake ..
 $ make
 $ sudo make install
@@ -43,9 +43,9 @@ $ sudo make install
 Latest master (requires [git](https://git-scm.com/), [CMake](https://cmake.org/) >= 3.1 and [asio](https://think-async.com/Asio/)):
 
 ```shell
-$ git clone https://github.com/.../....git
-$ mkdir .../build
-$ cd .../build
+$ git clone https://github.com/dimitry-ishenko-casparcg/logi.git
+$ mkdir logi/build
+$ cd logi/build
 $ cmake ..
 $ make
 $ sudo make install
