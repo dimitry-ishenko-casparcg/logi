@@ -1,5 +1,0 @@
-[Unit]
-Description=Logitech R800 control on %I
-
-[Service]
-ExecStart=/usr/bin/@PROJECT_NAME@ %I

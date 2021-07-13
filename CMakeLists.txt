@@ -29,8 +29,7 @@ target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 install(FILES udev/50-logi.rules DESTINATION /lib/udev/rules.d)
-configure_file(systemd/logi@.service.in logi@.service @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/logi@.service DESTINATION /lib/systemd/system)
+install(FILES systemd/logi@.service DESTINATION /lib/systemd/system)
 
 ########################
 # package
@@ -42,8 +41,6 @@ set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Dimitry Ishenko <dimitry (dot) ishenko (at)
 
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
-set(CPACK_DEBIAN_PACKAGE_DEPENDS )
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 
 include(CPack)
-
