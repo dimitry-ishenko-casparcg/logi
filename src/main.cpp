@@ -26,7 +26,7 @@ namespace fs = std::filesystem;
 int main(int argc, char* argv[])
 try
 {
-    std::string name{ fs::path(argv[0]).filename() };
+    auto name{ fs::path(argv[0]).filename() };
 
     pgm::args args
     {
@@ -46,7 +46,7 @@ try
     }
     else if(args["--version"])
     {
-        std::cout << name << " version " << VERSION << std::endl;
+        std::cout << name.string() << " version " << VERSION << std::endl;
     }
     else if(ep)
     {
