@@ -16,6 +16,8 @@
 #include <iostream>
 #include <string>
 
+#include <linux/input.h>
+
 namespace fs = std::filesystem;
 
 #if !defined(VERSION)
@@ -61,27 +63,27 @@ try
         src::remote remote{ io, path };
         src::sender sender{ io };
 
-        remote.on_press([&](int code)
+        remote.on_press([&](src::button b)
         {
-            switch(code)
+            switch(b)
             {
-            case KEY_PAGEUP:
+            case src::prev :
                 sender.send(KEY_UP);
                 sender.send(KEY_F2);
                 break;
 
-            case KEY_PAGEDOWN:
+            case src::next :
                 sender.send(KEY_DOWN);
                 sender.send(KEY_F2);
                 break;
 
-            case KEY_F5:
-            case KEY_ESC:
+            case src::start:
+            case src::stop :
                 sender.send(KEY_HOME);
                 sender.send(KEY_F2);
                 break;
 
-            case KEY_DOT:
+            case src::black:
                 sender.send(KEY_END);
                 sender.send(KEY_F2);
                 break;

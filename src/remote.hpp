@@ -12,16 +12,19 @@
 #include <asio.hpp>
 #include <filesystem>
 #include <functional>
-
-#include <linux/input.h> // KEY_... defines
+#include <memory>
 
 namespace fs = std::filesystem;
+
+struct input_event;
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace src
 {
 
-using press_callback = std::function<void(int)>;
+enum button { prev, next, start, stop, black };
+
+using press_callback = std::function<void(button)>;
 
 ////////////////////////////////////////////////////////////////////////////////
 class remote
@@ -36,7 +39,7 @@ private:
     fs::path path_;
     asio::posix::stream_descriptor sd_;
 
-    input_event ev_;
+    std::unique_ptr<input_event> ev_;
     void sched_read();
 
     press_callback cb_;

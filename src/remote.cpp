@@ -14,6 +14,7 @@
 #include <system_error>
 
 #include <fcntl.h> // open
+#include <linux/input.h>
 
 using namespace std::chrono_literals;
 
@@ -41,7 +42,7 @@ struct release_device
 
 ////////////////////////////////////////////////////////////////////////////////
 remote::remote(asio::io_context& io, fs::path path) :
-    path_{ std::move(path) }, sd_{ io }, timer_{ io }
+    path_{ std::move(path) }, sd_{ io }, ev_{ new input_event{ } }, timer_{ io }
 {
     std::cout << "Opening device " << path_ << "." << std::endl;
     auto fd = ::open(path_.c_str(), O_RDONLY);
@@ -70,11 +71,19 @@ remote::~remote()
 ////////////////////////////////////////////////////////////////////////////////
 void remote::sched_read()
 {
-    auto buffer = asio::buffer(&ev_, sizeof(ev_));
+    auto buffer = asio::buffer(&*ev_, sizeof(*ev_));
     asio::async_read(sd_, buffer, [&](const asio::error_code& ec, std::size_t)
     {
         if(ec) return;
-        if(ev_.type == EV_KEY && ev_.value == 1 && cb_) cb_(ev_.code);
+        if(ev_->type == EV_KEY && ev_->value == 1 && cb_)
+            switch(ev_->code)
+            {
+            case KEY_PAGEUP  : cb_(prev ); break;
+            case KEY_PAGEDOWN: cb_(next ); break;
+            case KEY_F5      : cb_(start); break;
+            case KEY_ESC     : cb_(stop ); break;
+            case KEY_DOT     : cb_(black); break;
+            }
 
         sched_read();
     });
