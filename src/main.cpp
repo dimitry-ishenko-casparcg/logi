@@ -13,13 +13,36 @@
 #include <exception>
 #include <filesystem>
 #include <iostream>
+#include <osc++.hpp>
 #include <string>
 
+using namespace asio::ip;
 namespace fs = std::filesystem;
 
 #if !defined(VERSION)
 #  define VERSION "0"
 #endif
+
+////////////////////////////////////////////////////////////////////////////////
+auto to_address(const std::string& s)
+{
+    asio::error_code ec;
+    auto address = make_address(s, ec);
+
+    if(!ec) return address;
+    else throw pgm::invalid_argument{ "Invalid IP address", s };
+}
+
+////////////////////////////////////////////////////////////////////////////////
+auto to_port(const std::string& s)
+{
+    char* end;
+    auto ul = std::strtoul(s.data(), &end, 0);
+
+    if(ul <= UINT16_MAX && end == (s.data() + s.size()))
+        return static_cast<std::uint16_t>(ul);
+    else throw pgm::invalid_argument{ "Invalid port number", s };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[])
@@ -29,9 +52,12 @@ try
 
     pgm::args args
     {
-        { "-h", "--help",    "Print this help screen and exit." },
-        { "-v", "--version", "Show version number and exit."    },
-        { "path",            "Path to Logitech R800 device."    },
+        { "-a", "--address", "addr", "Specify OSC server IP address to send messages to.\n"
+                                     "Default: 127.0.0.1"               },
+        { "-p", "--port", "N",       "Specify OSC server port number. Default: 6260." },
+        { "-h", "--help",            "Print this help screen and exit." },
+        { "-v", "--version",         "Show version number and exit."    },
+        { "path",                    "Path to Logitech R800 device."    },
     };
 
     // delay exception handling to process --help and --version
@@ -41,7 +67,7 @@ try
 
     if(args["--help"])
     {
-        std::cout << '\n' << args.usage(name) << '\n' << std::endl;
+        std::cout << "\n" << args.usage(name) << "\n" << std::endl;
     }
     else if(args["--version"])
     {
@@ -54,19 +80,33 @@ try
     else
     {
         fs::path path{ args["path"].value() };
+
+        udp::endpoint ep{
+            to_address( args["--address"].value_or("127.0.0.1") ),
+            to_port( args["--port"].value_or("6260") )
+        };
+
         asio::io_context io;
+        udp::socket socket{ io };
+        socket.open(udp::v4());
 
         src::remote remote{ io, path };
         remote.on_press([&](src::button b)
         {
+            osc::message msg{ "/remote/logitech/r800/press" };
+
             switch(b)
             {
-            case src::prev : break;
-            case src::next : break;
-            case src::start: break;
-            case src::stop : break;
-            case src::black: break;
+            case src::prev : msg <<  "prev"; break;
+            case src::next : msg <<  "next"; break;
+            case src::start: msg << "start"; break;
+            case src::stop : msg <<  "stop"; break;
+            case src::black: msg << "black"; break;
+            default: return;
             }
+
+            auto pack{ msg.to_packet() };
+            socket.send_to(asio::buffer(pack.data(), pack.size()), ep);
         });
 
         src::on_interrupt([&](int signal)
