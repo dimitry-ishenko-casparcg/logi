@@ -51,14 +51,14 @@ try
     auto name{ fs::path(argv[0]).filename() };
 
     pgm::args args
-    {
+    {{
         { "-a", "--address", "addr", "Specify OSC server IP address to send messages to.\n"
                                      "Default: 127.0.0.1"               },
         { "-p", "--port", "N",       "Specify OSC server port number. Default: 6260." },
         { "-h", "--help",            "Print this help screen and exit." },
         { "-v", "--version",         "Show version number and exit."    },
         { "path",                    "Path to Logitech R800 device."    },
-    };
+    }};
 
     // delay exception handling to process --help and --version
     std::exception_ptr ep;
