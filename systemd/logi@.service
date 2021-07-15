@@ -2,6 +2,7 @@
 Description=Logitech R800 control on %I
 
 [Service]
-ExecStart=/usr/bin/logi %I
+Environment="args="
+ExecStart=/usr/bin/logi $args %I
 StandardOutput=journal
 StandardError=journal
