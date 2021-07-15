@@ -15,7 +15,6 @@ set(SOURCES
     pgm/args.cpp pgm/args.hpp
     src/main.cpp
     src/remote.cpp src/remote.hpp
-    src/sender.cpp src/sender.hpp
     src/util.cpp src/util.hpp
 )
 

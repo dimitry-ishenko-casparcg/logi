@@ -7,7 +7,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "pgm/args.hpp"
 #include "remote.hpp"
-#include "sender.hpp"
 #include "util.hpp"
 
 #include <asio.hpp>
@@ -15,8 +14,6 @@
 #include <filesystem>
 #include <iostream>
 #include <string>
-
-#include <linux/input.h>
 
 namespace fs = std::filesystem;
 
@@ -57,36 +54,18 @@ try
     else
     {
         fs::path path{ args["path"].value() };
-
         asio::io_context io;
 
         src::remote remote{ io, path };
-        src::sender sender{ io };
-
         remote.on_press([&](src::button b)
         {
             switch(b)
             {
-            case src::prev :
-                sender.send(KEY_UP);
-                sender.send(KEY_F2);
-                break;
-
-            case src::next :
-                sender.send(KEY_DOWN);
-                sender.send(KEY_F2);
-                break;
-
-            case src::start:
-            case src::stop :
-                sender.send(KEY_HOME);
-                sender.send(KEY_F2);
-                break;
-
-            case src::black:
-                sender.send(KEY_END);
-                sender.send(KEY_F2);
-                break;
+            case src::prev : break;
+            case src::next : break;
+            case src::start: break;
+            case src::stop : break;
+            case src::black: break;
             }
         });
 
