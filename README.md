@@ -1,51 +1,71 @@
-# Logitech R800 control for CasparCG Client
+# logi - Logitech R800 to OSC translator
 
-This program enables control of the [CasparCG Client](https://github.com/CasparCG/client) using the
-[Logitech R800](https://www.logitech.com/en-us/products/presenters/r800-professional-presenter.html) remote control.
+**logi** intercepts button presses from
+[Logitech R800](https://www.logitech.com/en-us/products/presenters/r800-professional-presenter.html)
+remote control and translates them into OSC messages as follows:
+
+|Button | OSC message                           |
+|:-----:|---------------------------------------|
+| ` < ` | `/remote/logitech/r800/press` `prev`  |
+| ` > ` | `/remote/logitech/r800/press` `next`  |
+| ` 🞂 ` | `/remote/logitech/r800/press` `start` |
+| ` 🞂 ` | `/remote/logitech/r800/press` `stop`  |
+| ` ⎚ ` | `/remote/logitech/r800/press` `black` |
+
+NB: On each press the ` 🞂 ` button alternates between `start` and `stop`
+commands. 
 
 ## Installation
 
 ### Binary
 
+Requires [libosc++](https://github.com/dimitry-ishenko-cpp/liboscpp) >= 1.0.
+
 Debian/Ubuntu/etc:
 
 ```shell
-$ ver=2.0
-$ url=https://github.com/dimitry-ishenko-casparcg/logi/releases/download/v${ver}
-$ wget ${url}/logi_${ver}_amd64.deb
-$ sudo apt install ./logi_${ver}_amd64.deb
+$ p=logi
+$ v=2.0
+$ wget https://github.com/dimitry-ishenko-casparcg/${p}/releases/download/v${v}/${p}_${v}_amd64.deb
+$ sudo apt install ./${p}_${v}_amd64.deb
 ```
 
 RaspberryPi:
 
 ```shell
-$ ver=2.0
-$ url=https://github.com/dimitry-ishenko-casparcg/logi/releases/download/v${ver}
-$ wget ${url}/logi_${ver}_armhf.deb
-$ sudo apt install ./logi_${ver}_armhf.deb
+$ p=logi
+$ v=2.0
+$ wget https://github.com/dimitry-ishenko-casparcg/${p}/releases/download/v${v}/${p}_${v}_armhf.deb
+$ sudo apt install ./${p}_${v}_armhf.deb
 ```
 
 ### From source
 
-Stable version (requires [CMake](https://cmake.org/) >= 3.1 and [asio](https://think-async.com/Asio/)):
+Stable version (requires [CMake](https://cmake.org/) >= 3.1,
+[asio](https://think-async.com/Asio/) and
+[libosc++-dev](https://github.com/dimitry-ishenko-cpp/liboscpp) >= 1.0):
 
 ```shell
-$ ver=2.0
-$ wget https://github.com/dimitry-ishenko-casparcg/logi/archive/v${ver}.tar.gz
-$ tar xzf v${ver}.tar.gz
-$ mkdir logi-${ver}/build
-$ cd logi-${ver}/build
+$ p=logi
+$ v=2.0
+$ wget https://github.com/dimitry-ishenko-casparcg/${p}/archive/v${v}.tar.gz
+$ tar xzf v${v}.tar.gz
+$ mkdir ${p}-${ver}/build
+$ cd ${p}-${ver}/build
 $ cmake ..
 $ make
 $ sudo make install
 ```
 
-Latest master (requires [git](https://git-scm.com/), [CMake](https://cmake.org/) >= 3.1 and [asio](https://think-async.com/Asio/)):
+Latest master (requires [git](https://git-scm.com/),
+[CMake](https://cmake.org/) >= 3.1, [asio](https://think-async.com/Asio/) and
+[libosc++-dev](https://github.com/dimitry-ishenko-cpp/liboscpp) >= 1.0):
 
 ```shell
-$ git clone https://github.com/dimitry-ishenko-casparcg/logi.git
-$ mkdir logi/build
-$ cd logi/build
+$ p=logi
+$ git clone --recursive https://github.com/dimitry-ishenko-casparcg/${p}.git
+$ mkdir ${p}/build
+$ cd ${p}/build
 $ cmake ..
 $ make
 $ sudo make install
