@@ -13,7 +13,7 @@ remote control and translates them into OSC messages as follows:
 | ` ⎚ ` | `/remote/logitech/r800/press` `black` |
 
 NB: On each press the ` 🞂 ` button alternates between `start` and `stop`
-commands. 
+commands.
 
 ## Installation
 
@@ -48,10 +48,10 @@ Stable version (requires [CMake](https://cmake.org/) >= 3.1,
 ```shell
 $ p=logi
 $ v=3.0
-$ wget https://github.com/dimitry-ishenko-casparcg/${p}/archive/v${v}.tar.gz
-$ tar xzf v${v}.tar.gz
-$ mkdir ${p}-${ver}/build
-$ cd ${p}-${ver}/build
+$ wget https://github.com/dimitry-ishenko-casparcg/${p}/releases/download/v${v}/${p}-${v}.tar.bz2
+$ tar xjf ${p}-${v}.tar.bz2
+$ mkdir ${p}-${v}/build
+$ cd ${p}-${v}/build
 $ cmake ..
 $ make
 $ sudo make install
