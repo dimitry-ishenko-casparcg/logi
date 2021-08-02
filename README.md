@@ -12,8 +12,26 @@ remote control and translates them into OSC messages as follows:
 | ` 🞂 ` | `/remote/logitech/r800/press` `stop`  |
 | ` ⎚ ` | `/remote/logitech/r800/press` `black` |
 
-NB: On each press the ` 🞂 ` button alternates between `start` and `stop`
-commands.
+NB: On each press the ` 🞂 ` button on R800 alternates between the `start` and
+the `stop` commands.
+
+By default **logi** will send messages to an OSC server on IP address
+`127.0.0.1` and port `6260`. These can be changed with the `--address` and
+`--port` options respectively.
+
+In order to do that, you have to override them in the `logi@.service` file. For
+example:
+
+```shell
+sudo systemctl edit logi@.service
+```
+
+and add the following lines:
+
+```ini
+[Service]
+Environment="args=--address=10.0.42.123 --port=4567"
+```
 
 ## Installation
 
