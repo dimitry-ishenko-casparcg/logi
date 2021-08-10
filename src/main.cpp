@@ -47,7 +47,7 @@ auto to_port(const std::string& s)
 int main(int argc, char* argv[])
 try
 {
-    auto name{ fs::path(argv[0]).filename() };
+    auto name = fs::path{ argv[0] }.filename();
 
     std::string def_address = "127.0.0.1";
     std::string def_port = "6260";
@@ -108,7 +108,7 @@ try
             default: return;
             }
 
-            auto packet{ msg.to_packet() };
+            auto packet = msg.to_packet();
             socket.send_to(asio::buffer(packet.data(), packet.size()), ep);
         });
 
