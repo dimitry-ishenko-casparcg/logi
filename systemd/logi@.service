@@ -1,5 +1,5 @@
 [Unit]
-Description=Logitech R800 control on %I
+Description=Logitech R800 on %I
 
 [Service]
 Environment="args="
