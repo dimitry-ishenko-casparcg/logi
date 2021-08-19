@@ -33,6 +33,8 @@ and add the following lines:
 Environment="args=--address=10.0.42.123 --port=4567"
 ```
 
+Share and enjoy.
+
 ## Installation
 
 ### Binary
